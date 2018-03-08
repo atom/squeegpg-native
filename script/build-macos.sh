@@ -21,7 +21,7 @@ has automake
 
 ## Download and build prerequisites ###################################################################################
 
-function depversion {
+function getversion {
   local DEP=$1
 
   sed -n -e "s/^${DEP}:[[:space:]]*\([[:digit:]][[:digit:].]*\)/\\1/p" "${ROOT}/versions"
@@ -30,7 +30,7 @@ function depversion {
 function depurl {
   local DEP=$1
 
-  printf "https://gnupg.org/ftp/gcrypt/${DEP}/${DEP}-$(depversion ${DEP}).tar.bz2"
+  printf "https://gnupg.org/ftp/gcrypt/${DEP}/${DEP}-$(getversion ${DEP}).tar.bz2"
 }
 
 function depargs {
@@ -38,27 +38,34 @@ function depargs {
 
   case "${DEP}" in
     libgpg-error)
-      printf -- "--disable-doc --disable-tests --disable-languages"
+      echo -n \
+        "--enable-static --disable-shared --disable-rpath " \
+        "--disable-doc --disable-tests --disable-languages"
       ;;
     npth)
-      printf -- "--disable-tests"
+      echo -n \
+        "--enable-static --disable-shared " \
+        "--disable-tests"
       ;;
     libgcrypt)
-      printf -- \
+      echo -n \
+        "--enable-static --disable-shared " \
         "--with-libgpg-error-prefix=${ROOT}/build/deps/libgpg-error " \
         "--with-pth-prefix=${ROOT}/build/deps/npth "
       ;;
     libassuan)
-      printf -- \
+      echo -n \
+        "--enable-static --disable-shared " \
         "--with-libgpg-error-prefix=${ROOT}/build/deps/libgpg-error " \
         "--disable-doc"
       ;;
     libksba)
-      printf -- \
+      echo -n \
+        "--enable-static --disable-shared " \
         "--with-libgpg-error-prefix=${ROOT}/build/deps/libgpg-error"
       ;;
     pinentry)
-      printf -- \
+      echo -n \
         "--with-libgpg-error-prefix=${ROOT}/build/deps/libgpg-error " \
         "--with-libassuan-prefix=${ROOT}/build/deps/libassuan"
       ;;
@@ -68,7 +75,7 @@ function depargs {
 }
 
 for DEP in libgpg-error npth libgcrypt libassuan libksba pinentry; do
-  DEPVERSION="$(depversion ${DEP})"
+  DEPVERSION="$(getversion ${DEP})"
   if [ -z "${DEPVERSION}" ]; then
     error "Unable to find the version of ${DEP}."
     error "Please add a line like the following to ${ROOT}/versions:"
@@ -78,12 +85,12 @@ for DEP in libgpg-error npth libgcrypt libassuan libksba pinentry; do
   title "Building ${DEP} ${DEPVERSION}"
   info "${DEP} version ${DEPVERSION}"
 
-  DEPSRC="${ROOT}/deps/${DEP}-${DEPVERSION}"
-  DEPTARBALL="${ROOT}/deps/${DEP}-${DEPVERSION}.tar.bz2"
+  DEPSRC="${ROOT}/src/${DEP}-${DEPVERSION}"
+  DEPTARBALL="${ROOT}/src/${DEP}-${DEPVERSION}.tar.bz2"
   DEPTARGET="${ROOT}/build/deps/${DEP}"
   MARKFILE="${DEPTARGET}/.success"
 
-  mkdir -p ${ROOT}/deps/
+  mkdir -p ${ROOT}/src/
 
   if [ -d "${DEPSRC}" ] || [ -f "${DEPTARBALL}" ]; then
     verbose "Dependency ${DEP} has already been downloaded."
@@ -100,7 +107,7 @@ for DEP in libgpg-error npth libgcrypt libassuan libksba pinentry; do
     verbose "Dependency ${DEP} has already been unpacked."
   else
     info "Unpacking tarball for ${DEPSRC}."
-    cd "${ROOT}/deps"
+    cd "${ROOT}/src"
     tar xjf "${DEPTARBALL}"
   fi
 
@@ -125,3 +132,79 @@ for DEP in libgpg-error npth libgcrypt libassuan libksba pinentry; do
   info "Successfully build ${DEP}."
   touch "${MARKFILE}"
 done
+
+## Download and build GPG #############################################################################################
+
+GPGVERSION=$(getversion gnupg)
+if [ -z "${GPGVERSION}" ]; then
+  error "Unable to find the version of GPG to build."
+  error "Please add a line like the following to ${ROOT}/versions:"
+  error "  gnupg: x.y.z"
+  exit 1
+fi
+
+title "Building gpg ${GPGVERSION}"
+info "GPG version ${GPGVERSION}"
+
+GPGSRC="${ROOT}/src/gnupg-${GPGVERSION}"
+GPGURL="https://gnupg.org/ftp/gcrypt/gnupg/gnupg-${GPGVERSION}.tar.bz2"
+GPGTARBALL="${ROOT}/src/gnupg-${GPGVERSION}.tar.bz2"
+GPGTARGET="${ROOT}/build/gnupg"
+MARKFILE="${GPGTARGET}/.success"
+
+if [ -d "${GPGSRC}" ] || [ -f "${GPGTARBALL}" ]; then
+  verbose "GPG has already been downloaded"
+else
+  info "Downloading GPG tarball."
+  curl --silent --fail --output "${GPGTARBALL}" "${GPGURL}" || {
+    error "Unable to download GPG from URL:"
+    error "${GPGURL}"
+    exit 1
+  }
+fi
+
+if [ -d "${GPGSRC}" ]; then
+  verbose "GPG has already been unpacked."
+else
+  info "Unpacking tarball for GPG."
+  cd "${ROOT}/src"
+  tar xjf "${GPGTARBALL}"
+fi
+
+if [ -f "${MARKFILE}" ]; then
+  verbose "GPG has already been built."
+else
+  mkdir -p "${GPGTARGET}"
+
+  cd "${GPGSRC}"
+  info "Building GPG."
+  verbose "configure"
+  sh ./configure --prefix="${GPGTARGET}" \
+    --with-libgpg-error-prefix="${ROOT}/build/deps/libgpg-error" \
+    --with-libgcrypt-prefix="${ROOT}/build/deps/libgcrypt" \
+    --with-libassuan-prefix="${ROOT}/build/deps/libassuan" \
+    --with-ksba-prefix="${ROOT}/build/deps/libksba" \
+    --with-npth-prefix="${ROOT}/build/deps/npth" \
+    --disable-dependency-tracking \
+    --disable-gpgsm \
+    --disable-scdaemon \
+    --disable-dirmngr \
+    --disable-doc \
+    --disable-gpgtar \
+    --disable-photo-viewers \
+    --disable-rpath
+  verbose "make"
+  make
+  verbose "make install"
+  make install
+  info "Successfully build GPG."
+  touch "${MARKFILE}"
+fi
+
+info "Dynamic dependencies of the GPG binaries:"
+
+for BINARY in ${GPGTARGET}/bin/*; do
+  otool -L "${BINARY}"
+done
+
+title "✨ Build successful ✨"
