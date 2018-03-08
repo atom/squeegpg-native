@@ -11,15 +11,15 @@ function verbose {
 
 function info {
   local MESSAGE=$1
-  printf "\[\033[1;36m\][==]\[\033[0m\] %s\n" "${MESSAGE}"
+  printf "\033[1;36m[==]\033[0m %s\n" "${MESSAGE}"
 }
 
 function warning {
   local MESSAGE=$1
-  printf "\[\033[1;33m\][!!]\[\033[0m\] %s\n" "${MESSAGE}"
+  printf "\033[1;33m[!!]\033[0m %s\n" "${MESSAGE}"
 }
 
 function error {
   local MESSAGE=$1
-  printf "\[\033[1;31m\][xx]\[\033[0m\] %s\n" "${MESSAGE}" >&2
+  printf "\033[1;31m[xx]\033[0m %s\n" "${MESSAGE}" >&2
 }

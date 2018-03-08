@@ -17,9 +17,6 @@ export GPGROOT="${ROOT}/gnupg"
 # shellcheck source=helper/log.sh
 source "${SCRIPT}/helper/log.sh"
 
-# shellcheck source=helper/prereq.sh
-source "${SCRIPT}/helper/prereq.sh"
-
 ## Infer the target platform ##########################################################################################
 
 if [ -z "${TARGET_PLATFORM:-}" ]; then
