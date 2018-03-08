@@ -178,7 +178,13 @@ else
 
   cd "${GPGSRC}"
   info "Building GPG."
+
   verbose "configure"
+
+  # Workaround for missing libgcrypt include
+  export CFLAGS
+  CFLAGS=$(${ROOT}/build/deps/libgcrypt/bin/libgcrypt-config --cflags)
+
   sh ./configure --prefix="${GPGTARGET}" \
     --with-libgpg-error-prefix="${ROOT}/build/deps/libgpg-error" \
     --with-libgcrypt-prefix="${ROOT}/build/deps/libgcrypt" \
@@ -193,10 +199,13 @@ else
     --disable-gpgtar \
     --disable-photo-viewers \
     --disable-rpath
+
   verbose "make"
   make
+
   verbose "make install"
   make install
+
   info "Successfully build GPG."
   touch "${MARKFILE}"
 fi
