@@ -5,7 +5,6 @@ $rootDir = Join-Path -Resolve -Path $scriptDir -ChildPath ..
 
 function Get-ModuleVersion ($Name)
 {
-  Write-Error "Called with ${Name}"
   $versionFile = Join-Path -Path $rootDir -ChildPath 'versions'
   $m = Get-Content -Path $versionFile | Select-String -Pattern "${Name}:\s+([0-9.]+)"
   If ($m.Matches.Count -ge 1)
