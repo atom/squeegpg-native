@@ -1,6 +1,6 @@
 # Download and repackage the GPG binaries built from gpg4win.
 
-$scriptDir = $MyInvocation.MyCommand.Path
+$scriptDir = Split-Path -Path $MyInvocation.MyCommand.Path -Parent
 $rootDir = Join-Path -Resolve -Path $scriptDir -ChildPath ..
 
 function Get-Module-Version ($Name)
