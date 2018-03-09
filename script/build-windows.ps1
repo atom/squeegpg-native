@@ -28,10 +28,10 @@ function Get-Dir-Maybe ($Path)
 $version = Get-ModuleVersion -Name gpg4win
 
 Write-Information "Downloading gpg4win version ${version}."
-Invoke-WebRequest -Uri "https://files.gpg4win.org/gpg4win-${version}.exe" -OutFile "./gpg4win-${version}.exe"
+Invoke-WebRequest -Uri "https://files.gpg4win.org/gpg4win-${version}.exe" -OutFile "$rootDir/gpg4win-${version}.exe"
 
-$installDir = New-Item -Path './install' -ItemType Directory
-$gpgDir = Join-Path -Resolve -Path $PWD -ChildPath "GnuPG"
+$installDir = New-Item -Path "$rootDir/install" -ItemType Directory
+$gpgDir = Join-Path -Resolve -Path $rootDir -ChildPath "GnuPG"
 
 Start-Process `
   -FilePath "./gpg4win-${version}.exe" `
