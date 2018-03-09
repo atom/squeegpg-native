@@ -3,11 +3,12 @@
 $scriptDir = Split-Path -Path $MyInvocation.MyCommand.Path -Parent
 $rootDir = Join-Path -Resolve -Path $scriptDir -ChildPath ..
 
-function Get-Module-Version ($Name)
+function Get-ModuleVersion ($Name)
 {
+  Write-Error "Called with ${Name}"
   $versionFile = Join-Path -Path $rootDir -ChildPath 'versions'
-  $m = Get-Content -Path $versionFile | Select-String -List -Pattern "${Name}:\\s+([0-9.]+)"
-  If ($ms.Success)
+  $m = Get-Content -Path $versionFile | Select-String -Pattern "${Name}:\s+([0-9.]+)"
+  If ($m.Matches.Count -ge 1)
   {
     return $m.Matches[0].Groups[1].Value
   } else {
@@ -25,7 +26,7 @@ function Get-Dir-Maybe ($Path)
   }
 }
 
-$version = Get-Module-Version -Name gpg4win
+$version = Get-ModuleVersion -Name gpg4win
 
 Write-Information "Downloading gpg4win version ${version}."
 Invoke-WebRequest -Uri "https://files.gpg4win.org/gpg4win-${version}.exe" -OutFile "./gpg4win-${version}.exe"
