@@ -7,6 +7,10 @@ function getversion {
 }
 
 function module {
+  local OPTIND=1
+  local OPT
+  local OPTARG
+
   local NAME
   local VERSION
   local URL
@@ -20,16 +24,16 @@ function module {
   while getopts ":n:c:f:o:" OPT; do
     case ${OPT} in
       n)
-        NAME=${OPT}
+        NAME=${OPTARG}
         ;;
       c)
-        CONFIGURE_ARGS+=("--${OPT}")
+        CONFIGURE_ARGS+=("--${OPTARG}")
         ;;
       f)
-        EXTRA_CFLAGS+=("${OPT}")
+        EXTRA_CFLAGS+=("${OPTARG}")
         ;;
       o)
-        OUTDIR="${OPT}"
+        OUTDIR="${OPTARG}"
         ;;
       \?)
         error "module: Invalid option -${OPTARG}."
