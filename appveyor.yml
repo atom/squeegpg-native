@@ -1,4 +1,4 @@
-version: {build}
+version: "{build}"
 platform: x64
 clone_depth: 10
 max_jobs: 1
