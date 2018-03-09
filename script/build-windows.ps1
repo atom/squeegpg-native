@@ -31,12 +31,12 @@ Write-Information "Downloading gpg4win version ${version}."
 Invoke-WebRequest -Uri "https://files.gpg4win.org/gpg4win-${version}.exe" -OutFile "./gpg4win-${version}.exe"
 
 $installDir = New-Item -Path './install' -ItemType Directory
+$gpgDir = Join-Path -Resolve -Path $PWD -ChildPath "GnuPG"
+
 Start-Process `
   -FilePath "./gpg4win-${version}.exe" `
   -ArgumentList "/S", "/D=$($installDir.FullName)" `
   -NoNewWindow `
   -Wait
 
-Get-Dir-Maybe -Path $installDir.FullName
-Get-Dir-Maybe -Path "C:\Program Files (x86)\GnuPG"
-Get-Dir-Maybe -Path "C:\Program Files (x86)\Gpg4win"
+Get-Dir-Maybe -Path $gpgDir
