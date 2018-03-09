@@ -30,6 +30,9 @@ if [ -z "${TARGET_PLATFORM:-}" ]; then
     darwin*)
       TARGET_PLATFORM=macos
       ;;
+    linux*)
+      TARGET_PLATFORM=linux
+      ;;
     *)
       error "Unsupported OSTYPE: [${OSTYPE}]."
       ;;
@@ -43,6 +46,9 @@ fi
 case "${TARGET_PLATFORM}" in
   macos)
     ${SCRIPT}/build-macos.sh
+    ;;
+  linux)
+    ${SCRIPT}/build-linux.sh
     ;;
   *)
     error "Unsupported TARGET_PLATFORM: [${TARGET_PLATFORM}]."

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Build the current GPG version for MacOS.
+# Build the current GPG version for Linux.
 
 set -euo pipefail
 
@@ -65,7 +65,8 @@ module -n gnupg \
 info "Dynamic dependencies of the GPG binaries:"
 
 for BINARY in ${ROOT}/build/gnupg/bin/*; do
-  otool -L "${BINARY}"
+  info "${BINARY}"
+  ldd "${BINARY}" || true
 done
 
 title "✨ Build successful ✨"
