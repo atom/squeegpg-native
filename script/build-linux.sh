@@ -49,6 +49,7 @@ module -n pinentry \
 module -n gnupg \
   -f "$(${ROOT}/build/deps/libgcrypt/bin/libgcrypt-config --cflags)" \
   -f "-static" \
+  -f "-lpthread" \
   -c disable-gpgsm \
   -c disable-scdaemon \
   -c disable-dirmngr \
