@@ -1,6 +1,6 @@
 # Download and repackage the GPG binaries built from gpg4win.
 
-$scriptDir = $MyInvocation.PSScriptRoot
+$scriptDir = $MyInvocation.MyCommand.Path
 $rootDir = Join-Path -Resolve -Path $scriptDir -ChildPath ..
 
 function Get-Module-Version ($Name)
@@ -15,7 +15,7 @@ function Get-Module-Version ($Name)
   }
 }
 
-function Maybe-List-Dir ($Path)
+function Get-Dir-Maybe ($Path)
 {
   Write-Information "Listing ${Path}"
   If (Test-Path -Path $Path -PathType Container) {
@@ -37,6 +37,6 @@ Start-Process `
   -NoNewWindow `
   -Wait
 
-Maybe-List-Dir -Path $installDir.FullName
-Maybe-List-Dir -Path "C:\Program Files (x86)\GnuPG"
-Maybe-List-Dir -Path "C:\Program Files (x86)\Gpg4win"
+Get-Dir-Maybe -Path $installDir.FullName
+Get-Dir-Maybe -Path "C:\Program Files (x86)\GnuPG"
+Get-Dir-Maybe -Path "C:\Program Files (x86)\Gpg4win"
