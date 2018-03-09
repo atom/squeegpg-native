@@ -15,6 +15,16 @@ function Get-Module-Version ($Name)
   }
 }
 
+function Maybe-List-Dir ($Path)
+{
+  Write-Information "Listing ${Path}"
+  If (Test-Path -Path $Path -PathType Container) {
+    Get-ChildItem -Path $Path -Recurse
+  } else {
+    Write-Error "$Path does not exist"
+  }
+}
+
 $version = Get-Module-Version -Name gpg4win
 
 Write-Information "Downloading gpg4win version ${version}."
@@ -26,3 +36,7 @@ Start-Process `
   -ArgumentList "/S", "/D=$($installDir.FullName)" `
   -NoNewWindow `
   -Wait
+
+Maybe-List-Dir -Path $installDir.FullName
+Maybe-List-Dir -Path "C:\Program Files (x86)\GnuPG"
+Maybe-List-Dir -Path "C:\Program Files (x86)\Gpg4win"
