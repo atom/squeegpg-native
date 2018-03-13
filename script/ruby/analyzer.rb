@@ -93,7 +93,19 @@ if binaries.empty?
   exit 1
 end
 
+all_ok = true
+total_size = 0
 binaries.each do |binary|
+  total_size += File.size(binary)
+
   a = create_analyzer binary
   puts a.report
+
+  all_ok &&= a.ok?
 end
+puts "== Summary ==".bold
+
+total = Filesize.from("#{total_size} B")
+puts "Total size: #{total.pretty} (#{total.to_s})"
+
+exit 1 unless all_ok
