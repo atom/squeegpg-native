@@ -26,7 +26,7 @@ source "${SCRIPT}/helper/paths.sh"
 ## Create or amend the release ########################################################################################
 
 cd "${SCRIPT}/ruby/"
-which chruby >/dev/null 2>&1 && chruby 2.4.2
+type chruby >/dev/null 2>&1 && chruby 2.4.2
 bundle exec ruby ./release-o-matic.rb \
   --version-file "${ROOT}/versions" \
   --upload "${TARBALL}"
