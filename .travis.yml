@@ -1,8 +1,9 @@
 language: c
 before_install:
-- rvm install 2.5.0
+- rvm install --use 2.5.0
+- gem install bundler
 install:
-- cd script/ruby && bundle install --path vendor/bundle
+- pushd script/ruby && bundle install --path vendor/bundle && popd
 script:
 - script/build.sh
 - script/analyze.sh
