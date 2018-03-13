@@ -81,8 +81,12 @@ puts "Attaching assets to release."
 options[:artifacts].each do |artifact|
   print "Uploading #{artifact} ..."
   $stdout.flush
-  client.upload_asset(release.upload_url, artifact)
-  puts "Complete."
+  client.upload_asset(
+    release.url,
+    artifact,
+    name: File.basename(artifact)
+  )
+  puts " Complete."
 end
 
 puts "🌈 Release #{release.name} has been created."
