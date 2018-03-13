@@ -28,4 +28,5 @@ infer_platform
 
 IFS=" " read -r -a ARGS <<< "$(get_binaries --absolute --binary)"
 cd "${SCRIPT}/ruby"
+which chruby >/dev/null 2>&1 && chruby ruby-2.4.2
 bundle exec ruby ./analyzer.rb "${ARGS[@]}"
