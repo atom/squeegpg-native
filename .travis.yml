@@ -1,3 +1,15 @@
 language: c
+before_install:
+- rvm install 2.5.0
+install:
+- cd script/ruby && bundle install --path vendor/bundle
 script:
 - script/build.sh
+- script/analyze.sh
+- script/package.sh
+deploy:
+  skip_cleanup: true
+  on:
+    tags: true
+  provider: script
+  script: bash script/publish.sh
