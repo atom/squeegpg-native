@@ -18,6 +18,8 @@ jobs:
   deploy:
     docker:
     - image: circleci/ruby:2.5-node
+    environment:
+    - TARGET_PLATFORM=macos
     steps:
     - checkout
     - attach_workspace:
