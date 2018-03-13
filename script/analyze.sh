@@ -3,6 +3,7 @@
 # Analyze the binaries produced by build.sh.
 
 set -euo pipefail
+set -x
 
 ## Get our bearings in the filesystem #################################################################################
 
