@@ -19,6 +19,7 @@ jobs:
         paths:
         - script/ruby/vendor/bundle
     - run: script/build.sh
+    - run: script/analyze.sh
     - run: script/package.sh
     - persist_to_workspace:
         root: dist/
