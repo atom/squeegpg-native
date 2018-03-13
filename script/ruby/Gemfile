@@ -9,3 +9,12 @@ gem "octokit", "~> 4.8"
 
 # Added at 2018-03-13 10:49:46 -0400 by smashwilson:
 gem "mime-types", "~> 3.1"
+
+# Added at 2018-03-13 13:27:14 -0400 by smashwilson:
+gem "filesize", "~> 0.1.1"
+
+# Added at 2018-03-13 13:36:37 -0400 by smashwilson:
+gem "colorize", "~> 0.8.1"
+
+# Added at 2018-03-13 13:57:54 -0400 by smashwilson:
+gem "os", "~> 1.0"
