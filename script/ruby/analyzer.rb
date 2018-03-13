@@ -71,7 +71,7 @@ def create_analyzer path
   case
   when OS.mac? ; MacOSAnalyzer.new(path)
   else
-    raise Error.new("Unable to analyze binaries on platform:\n#{OS.report}")
+    raise RuntimeError.new("Unable to analyze binaries on platform:\n#{OS.report}")
   end
 end
 
