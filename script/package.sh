@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Download or build GPG for the current platform.
+# Package a GPG build for distribution.
 
 set -euo pipefail
 
@@ -20,20 +20,20 @@ source "${SCRIPT}/helper/log.sh"
 # shellcheck source=helper/platform.sh
 source "${SCRIPT}/helper/platform.sh"
 
-## Dispatch to platform build script ##################################################################################
+## Dispatch to platform package script #################################################################################
 
 infer_platform
 
 case "${TARGET_PLATFORM}" in
   macos)
-    ${SCRIPT}/build-macos.sh
+    ${SCRIPT}/package-macos.sh
     ;;
   linux)
-    ${SCRIPT}/build-linux.sh
+    ${SCRIPT}/package-linux.sh
     ;;
   *)
     error "Unsupported TARGET_PLATFORM: [${TARGET_PLATFORM}]."
-    error "Please choose one of: macos."
+    error "Please choose one of: macos, linux."
     exit 1
     ;;
 esac

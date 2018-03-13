@@ -4,7 +4,52 @@ jobs:
   build:
     macos:
       xcode: "9.0"
-
     steps:
     - checkout
     - run: script/build.sh
+    - run: script/package.sh
+    - persist_to_workspace:
+        root: dist/
+        paths:
+        - gnupg-macos.tar.gz
+    - store_artifacts:
+        path: dist/
+
+  deploy:
+    docker:
+    - image: circleci/ruby:2.5-node
+    environment:
+    - TARGET_PLATFORM=macos
+    steps:
+    - checkout
+    - attach_workspace:
+        at: dist/
+    - restore_cache:
+        keys:
+        - bundle-cache-{{ checksum "script/ruby/Gemfile.lock" }}
+        - bundle-cache
+    - run: |
+        cd script/ruby/
+        bundle install --path vendor/bundle
+    - save_cache:
+        key: bundle-cache-{{ checksum "script/ruby/Gemfile.lock" }}
+        paths:
+        - scriopt/ruby/vendor/bundle
+    - run: bundle exec script/publish.sh
+
+workflows:
+  version: 2
+  only:
+    jobs:
+    - build:
+        filters:
+          tags:
+            only: /.*/
+    - deploy:
+        requires:
+        - build
+        filters:
+          branches:
+            ignore: /.*/
+          tags:
+            only: /.*/
