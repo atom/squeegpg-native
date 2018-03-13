@@ -2,6 +2,7 @@
 
 require 'octokit'
 require 'optparse'
+require 'json'
 
 options = {
   :artifacts => [],
@@ -65,9 +66,14 @@ puts "Creating or locating the release for tag #{ref}."
 client = Octokit::Client.new(access_token: ENV['GH_TOKEN'])
 begin
   release = client.create_release("atom/squeegpg-native", ref, body: body)
-rescue Octokit::Conflict
-  puts "Release already exists."
-  release = client.release_for_tag("atom/squeegpg-native", ref)
+rescue Octokit::UnprocessableEntity => e
+  rbody = JSON.parse(e.response_body)
+  if rbody['errors'].any? { |e| e['code'] == "already_exists" }
+    puts "Release already exists."
+    release = client.release_for_tag("atom/squeegpg-native", ref)
+  else
+    raise e
+  end
 end
 
 puts "Attaching assets to release."
