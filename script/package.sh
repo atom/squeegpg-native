@@ -19,21 +19,15 @@ source "${SCRIPT}/helper/log.sh"
 
 # shellcheck source=helper/platform.sh
 source "${SCRIPT}/helper/platform.sh"
-
-## Dispatch to platform package script #################################################################################
-
 infer_platform
 
-case "${TARGET_PLATFORM}" in
-  macos)
-    ${SCRIPT}/package-macos.sh
-    ;;
-  linux)
-    ${SCRIPT}/package-linux.sh
-    ;;
-  *)
-    error "Unsupported TARGET_PLATFORM: [${TARGET_PLATFORM}]."
-    error "Please choose one of: macos, linux."
-    exit 1
-    ;;
-esac
+# shellcheck source=helper/paths.sh
+source "${SCRIPT}/helper/paths.sh"
+
+## Build the tarball ##################################################################################################
+
+mkdir -p "${DIST}"
+
+cd "${GPGOUT}"
+tar zcvf "${TARBALL}" "${REL_BINARIES[@]}"
+info "Built tarball at ${TARBALL}."
