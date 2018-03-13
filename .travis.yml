@@ -1,6 +1,6 @@
 language: c
 before_install:
-- rvm install --use 2.4.2
+- rvm install --default 2.4.2
 - gem install bundler
 install:
 - pushd script/ruby && bundle install --path vendor/bundle && popd
