@@ -63,9 +63,3 @@ module -n gnupg \
   -o "${ROOT}/build/gnupg"
 
 title "✨ Build successful ✨"
-
-## Analyze the binaries ###############################################################################################
-
-${SCRIPT}/ruby/analyzer.rb \
-  --binary "${ROOT}/build/gnupg/bin/gpg" \
-  --binary "${ROOT}/build/gnupg/bin/gpg-agent"
