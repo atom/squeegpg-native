@@ -47,7 +47,7 @@ if token.nil? || token.empty?
 end
 
 # ref = `git describe --tags --exact-match`
-ref = `git describe --tags`
+ref = `git describe --tags`.chomp
 unless $?.success?
   $stderr.puts "Unable to identify the current tag."
   exit 1
