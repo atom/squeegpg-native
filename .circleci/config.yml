@@ -12,7 +12,6 @@ jobs:
         - macos-bundle-cache-{{ checksum "script/ruby/Gemfile.lock" }}
         - macos-bundle-cache
     - run: |
-        ruby-install ruby 2.5.0
         cd script/ruby/
         bundle install --path vendor/bundle
     - save_cache:
@@ -31,7 +30,7 @@ jobs:
 
   deploy:
     docker:
-    - image: circleci/ruby:2.5-node
+    - image: circleci/ruby:2.4.2-node
     environment:
     - TARGET_PLATFORM=macos
     steps:
