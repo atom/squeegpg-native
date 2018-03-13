@@ -29,4 +29,4 @@ infer_platform
 IFS=" " read -r -a ARGS <<< "$(get_binaries --absolute --binary)"
 cd "${SCRIPT}/ruby"
 find . -type d
-bundle exec analyzer.rb "${ARGS[@]}"
+bundle exec ./analyzer.rb "${ARGS[@]}"

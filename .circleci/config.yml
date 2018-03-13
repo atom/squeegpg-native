@@ -16,7 +16,7 @@ jobs:
         bundle install --path vendor/bundle
     - run: |
         cd script/ruby/
-        bundle exec analyze.rb --help
+        bundle exec ./analyze.rb --help
     - save_cache:
         key: macos-bundle-cache-{{ checksum "script/ruby/Gemfile.lock" }}
         paths:
