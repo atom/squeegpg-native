@@ -12,6 +12,7 @@ jobs:
         - macos-bundle-cache-{{ checksum "script/ruby/Gemfile.lock" }}
         - macos-bundle-cache
     - run: |
+        gem install bundler
         cd script/ruby/
         bundle install --path vendor/bundle
     - save_cache:
