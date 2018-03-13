@@ -23,10 +23,12 @@ infer_platform
 # shellcheck source=helper/paths.sh
 source "${SCRIPT}/helper/paths.sh"
 
+# shellcheck source=helper/ruby.sh
+source "${SCRIPT}/helper/ruby.sh"
+
 ## Create or amend the release ########################################################################################
 
 cd "${SCRIPT}/ruby/"
-type chruby >/dev/null 2>&1 && chruby 2.4.2
 bundle exec ruby ./release-o-matic.rb \
   --version-file "${ROOT}/versions" \
   --upload "${TARBALL}"

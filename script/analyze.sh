@@ -23,11 +23,13 @@ source "${SCRIPT}/helper/platform.sh"
 # shellcheck source=helper/paths.sh
 source "${SCRIPT}/helper/paths.sh"
 
+# shellcheck source=helper/ruby.sh
+source "${SCRIPT}/helper/ruby.sh"
+
 ## Dispatch to platform package script #################################################################################
 
 infer_platform
 
 IFS=" " read -r -a ARGS <<< "$(get_binaries --absolute --binary)"
 cd "${SCRIPT}/ruby"
-type chruby >/dev/null 2>&1 && chruby 2.4.2
 bundle exec ruby ./analyzer.rb "${ARGS[@]}"
