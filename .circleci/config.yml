@@ -29,7 +29,7 @@ jobs:
     - run: |
         cd script/ruby/
         bundle install --path vendor/bundle
-    - save_to_cache:
+    - save_cache:
         key: bundle-cache-{{ checksum "script/ruby/Gemfile.lock" }}
         paths:
         - scriopt/ruby/vendor/bundle
