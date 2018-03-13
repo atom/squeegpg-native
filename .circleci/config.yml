@@ -18,6 +18,9 @@ jobs:
         key: macos-bundle-cache-{{ checksum "script/ruby/Gemfile.lock" }}
         paths:
         - script/ruby/vendor/bundle
+    - run: |
+        cd script/ruby/
+        bundle exec ruby ./analyzer.rb --help
     - run: script/build.sh
     - run: script/analyze.sh
     - run: script/package.sh
