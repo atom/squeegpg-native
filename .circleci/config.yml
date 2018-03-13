@@ -52,7 +52,7 @@ jobs:
         key: linux-bundle-cache-{{ checksum "script/ruby/Gemfile.lock" }}
         paths:
         - script/ruby/vendor/bundle
-    - run: bundle exec script/publish.sh
+    - run: script/publish.sh
 
 workflows:
   version: 2
