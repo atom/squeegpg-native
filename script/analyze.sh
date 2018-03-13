@@ -27,4 +27,4 @@ source "${SCRIPT}/helper/paths.sh"
 infer_platform
 
 IFS=" " read -r -a ARGS <<< "$(get_binaries --absolute --binary)"
-${SCRIPT}/ruby/analyzer.rb "${ARGS[@]}"
+bundle exec ${SCRIPT}/ruby/analyzer.rb "${ARGS[@]}"

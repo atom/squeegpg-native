@@ -25,6 +25,6 @@ source "${SCRIPT}/helper/paths.sh"
 
 ## Create or amend the release ########################################################################################
 
-${ROOT}/script/ruby/release-o-matic.rb \
+bundle exec ${ROOT}/script/ruby/release-o-matic.rb \
   --version-file "${ROOT}/versions" \
   --upload "${TARBALL}"
