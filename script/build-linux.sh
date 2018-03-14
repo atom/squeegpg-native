@@ -62,11 +62,4 @@ module -n gnupg \
   -c with-npth-prefix="${ROOT}/build/deps/npth" \
   -o "${ROOT}/build/gnupg"
 
-info "Dynamic dependencies of the GPG binaries:"
-
-for BINARY in ${ROOT}/build/gnupg/bin/*; do
-  info "${BINARY}"
-  ldd "${BINARY}" || true
-done
-
 title "✨ Build successful ✨"
