@@ -13,4 +13,4 @@ deploy:
   on:
     tags: true
   provider: script
-  script: bash script/publish.sh
+  script: rvm use 2.4.2 do script/publish.sh

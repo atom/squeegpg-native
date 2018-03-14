@@ -15,16 +15,6 @@ function Get-ModuleVersion ($Name)
   }
 }
 
-function Get-Dir-Maybe ($Path)
-{
-  Write-Information "Listing ${Path}"
-  If (Test-Path -Path $Path -PathType Container) {
-    Get-ChildItem -Path $Path -Recurse
-  } else {
-    Write-Error "$Path does not exist"
-  }
-}
-
 $version = Get-ModuleVersion -Name gpg4win
 
 Write-Information "Downloading gpg4win version ${version}."
@@ -39,4 +29,17 @@ Start-Process `
   -Wait
 
 $gpgDir = Join-Path -Resolve -Path $rootDir -ChildPath "GnuPG"
-Get-Dir-Maybe -Path $gpgDir
+Compress-Archive `
+  -Path "$gpgDir/bin/gpg.exe","$gpgDir/bin/gpg-agent.exe" `
+  -CompressionLevel Optimal `
+  -DestinationPath "$rootDir/gnupg-windows.zip"
+
+If ($env:APPVEYOR_REPO_TAG -eq "true")
+{
+  Push-Location -Path "$rootDir/script/ruby"
+  bundle install --path vendor/bundle
+  bundle exec ruby ./release-o-matic.rb `
+    --version-file "$rootDir/versions" `
+    --upload "$rootDir/gnupg-windows.zip"
+  Pop-Location
+}

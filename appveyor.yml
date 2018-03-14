@@ -1,8 +1,15 @@
 version: "{build}"
 platform: x64
+cache:
+- script/ruby/vendor/bundle
 clone_depth: 10
 max_jobs: 1
+install:
+- ps: $env:PATH = "C:\Ruby24-x64\bin;${env:PATH}"
 build_script:
 - ps: ./script/build-windows.ps1
 test: off
 deploy: off
+artifacts:
+- path: gnupg-windows.zip
+  name: gnupg-windows
