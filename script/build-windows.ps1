@@ -30,6 +30,6 @@ Start-Process `
 
 $gpgDir = Join-Path -Resolve -Path $rootDir -ChildPath "GnuPG"
 Compress-Archive `
-  -Path ["$gpgDir/bin/gpg.exe", "$gpgDir/bin/gpg-agent.exe"] `
+  -Path "$gpgDir/bin/gpg.exe","$gpgDir/bin/gpg-agent.exe" `
   -CompressionLevel Optimal `
   -DestinationPath "$rootDir/gnupg-windows.zip"
