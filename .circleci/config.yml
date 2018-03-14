@@ -22,7 +22,7 @@ jobs:
         cd script/ruby/
         bundle exec ruby ./analyzer.rb --help
     # - run: script/build.sh
-    - run: chruby-exec 2.4.1 -- script/analyze.sh
+    - run: chruby-exec 2.4.2 -- script/analyze.sh
     - run: script/package.sh
     - persist_to_workspace:
         root: dist/
