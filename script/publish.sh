@@ -10,30 +10,22 @@ export ROOT
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
 export SCRIPT="${ROOT}/script"
-export GPGROOT="${ROOT}/gnupg"
 
-## Source helpers ####################################################################################################
+## Source helpers #####################################################################################################
 
 # shellcheck source=helper/log.sh
 source "${SCRIPT}/helper/log.sh"
 
 # shellcheck source=helper/platform.sh
 source "${SCRIPT}/helper/platform.sh"
-
-## Dispatch to platform package script #################################################################################
-
 infer_platform
 
-case "${TARGET_PLATFORM}" in
-  macos)
-    ${SCRIPT}/publish-macos.sh
-    ;;
-  linux)
-    ${SCRIPT}/publish-linux.sh
-    ;;
-  *)
-    error "Unsupported TARGET_PLATFORM: [${TARGET_PLATFORM}]."
-    error "Please choose one of: macos, linux."
-    exit 1
-    ;;
-esac
+# shellcheck source=helper/paths.sh
+source "${SCRIPT}/helper/paths.sh"
+
+## Create or amend the release ########################################################################################
+
+cd "${SCRIPT}/ruby/"
+bundle exec ruby ./release-o-matic.rb \
+  --version-file "${ROOT}/versions" \
+  --upload "${TARBALL}"

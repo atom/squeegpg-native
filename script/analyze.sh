@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Package a GPG build for distribution.
+# Analyze the binaries produced by build.sh.
 
 set -euo pipefail
 
@@ -10,7 +10,6 @@ export ROOT
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
 export SCRIPT="${ROOT}/script"
-export GPGROOT="${ROOT}/gnupg"
 
 ## Source helpers ####################################################################################################
 
@@ -19,15 +18,14 @@ source "${SCRIPT}/helper/log.sh"
 
 # shellcheck source=helper/platform.sh
 source "${SCRIPT}/helper/platform.sh"
-infer_platform
 
 # shellcheck source=helper/paths.sh
 source "${SCRIPT}/helper/paths.sh"
 
-## Build the tarball ##################################################################################################
+## Dispatch to platform package script #################################################################################
 
-mkdir -p "${DIST}"
+infer_platform
 
-cd "${GPGOUT}"
-tar zcvf "${TARBALL}" "${REL_BINARIES[@]}"
-info "Built tarball at ${TARBALL}."
+IFS=" " read -r -a ARGS <<< "$(get_binaries --absolute --binary)"
+cd "${SCRIPT}/ruby"
+bundle exec ruby ./analyzer.rb "${ARGS[@]}"
