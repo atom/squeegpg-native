@@ -33,3 +33,13 @@ Compress-Archive `
   -Path "$gpgDir/bin/gpg.exe","$gpgDir/bin/gpg-agent.exe" `
   -CompressionLevel Optimal `
   -DestinationPath "$rootDir/gnupg-windows.zip"
+
+If ($env:APPVEYOR_REPO_TAG -eq "true")
+{
+  Push-Location -Path "$rootDir/script/ruby"
+  bundle install --path vendor/bundle
+  bundle exec ruby ./release-o-matic.rb `
+    --version-file "$rootDir/versions" `
+    --upload "$rootDir/gnupg-windows.zip"
+  Pop-Location
+}
