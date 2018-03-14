@@ -67,9 +67,20 @@ class MacOSAnalyzer < Analyzer
   end
 end
 
+class LinuxAnalyzer < Analyzer
+  def dynamic_libs
+    []
+  end
+
+  def highest_glibc_symbols
+    []
+  end
+end
+
 def create_analyzer path
   case
   when OS.mac? ; MacOSAnalyzer.new(path)
+  when OS.linux? ; LinuxAnalyzer.new(path)
   else
     raise RuntimeError.new("Unable to analyze binaries on platform:\n#{OS.report}")
   end
