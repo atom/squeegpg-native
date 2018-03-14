@@ -64,7 +64,7 @@ end
 puts "Creating or locating the release for tag #{ref}."
 client = Octokit::Client.new(access_token: ENV['GH_TOKEN'])
 begin
-  release = client.create_release("atom/squeegpg-native", ref, body: body, draft: true)
+  release = client.create_release("atom/squeegpg-native", ref, body: body)
 rescue Octokit::UnprocessableEntity => e
   rbody = JSON.parse(e.response_body)
   if rbody['errors'].any? { |e| e['code'] == "already_exists" }
