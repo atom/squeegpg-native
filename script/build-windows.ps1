@@ -15,16 +15,6 @@ function Get-ModuleVersion ($Name)
   }
 }
 
-function Get-Dir-Maybe ($Path)
-{
-  Write-Information "Listing ${Path}"
-  If (Test-Path -Path $Path -PathType Container) {
-    Get-ChildItem -Path $Path -Recurse
-  } else {
-    Write-Error "$Path does not exist"
-  }
-}
-
 $version = Get-ModuleVersion -Name gpg4win
 
 Write-Information "Downloading gpg4win version ${version}."
@@ -39,4 +29,7 @@ Start-Process `
   -Wait
 
 $gpgDir = Join-Path -Resolve -Path $rootDir -ChildPath "GnuPG"
-Get-Dir-Maybe -Path $gpgDir
+Compress-Archive `
+  -Path ["$gpgDir/bin/gpg.exe", "$gpgDir/bin/gpg-agent.exe"] `
+  -CompressionLevel Optimal `
+  -DestinationPath "$rootDir/gnupg-windows.zip"

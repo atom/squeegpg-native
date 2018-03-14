@@ -6,3 +6,6 @@ build_script:
 - ps: ./script/build-windows.ps1
 test: off
 deploy: off
+artifacts:
+- path: gnupg-windows.zip
+  name: gnupg-windows
