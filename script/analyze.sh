@@ -23,9 +23,6 @@ source "${SCRIPT}/helper/platform.sh"
 # shellcheck source=helper/paths.sh
 source "${SCRIPT}/helper/paths.sh"
 
-# shellcheck source=helper/ruby.sh
-source "${SCRIPT}/helper/ruby.sh"
-
 ## Dispatch to platform package script #################################################################################
 
 infer_platform

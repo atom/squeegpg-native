@@ -23,9 +23,6 @@ infer_platform
 # shellcheck source=helper/paths.sh
 source "${SCRIPT}/helper/paths.sh"
 
-# shellcheck source=helper/ruby.sh
-source "${SCRIPT}/helper/ruby.sh"
-
 ## Create or amend the release ########################################################################################
 
 cd "${SCRIPT}/ruby/"
