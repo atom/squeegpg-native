@@ -11,16 +11,24 @@ jobs:
         keys:
         - macos-bundle-cache-{{ checksum "script/ruby/Gemfile.lock" }}
         - macos-bundle-cache
-    - run: |
-        cd script/ruby/
-        bundle install --path vendor/bundle
+    - run:
+        name: install Ruby dependencies
+        command: |
+          cd script/ruby/
+          bundle install --path vendor/bundle
     - save_cache:
         key: macos-bundle-cache-{{ checksum "script/ruby/Gemfile.lock" }}
         paths:
         - script/ruby/vendor/bundle
-    - run: script/build.sh
-    - run: chruby-exec 2.4.2 -- script/analyze.sh
-    - run: script/package.sh
+    - run:
+        name: build
+        command: script/build.sh
+    - run:
+        name: analyze
+        command: chruby-exec 2.4.2 -- script/analyze.sh
+    - run:
+        name: package
+        command: script/package.sh
     - persist_to_workspace:
         root: dist/
         paths:
@@ -41,14 +49,18 @@ jobs:
         keys:
         - linux-bundle-cache-{{ checksum "script/ruby/Gemfile.lock" }}
         - linux-bundle-cache
-    - run: |
-        cd script/ruby/
-        bundle install --path vendor/bundle
+    - run:
+        name: install Ruby dependencies
+        command: |
+          cd script/ruby/
+          bundle install --path vendor/bundle
     - save_cache:
         key: linux-bundle-cache-{{ checksum "script/ruby/Gemfile.lock" }}
         paths:
         - script/ruby/vendor/bundle
-    - run: script/publish.sh
+    - run:
+        name: publish release
+        command: script/publish.sh
 
 workflows:
   version: 2
